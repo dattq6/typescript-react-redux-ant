@@ -30,7 +30,7 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "lint:fix": "eslint --fix './src/**/*.{ts,tsx}'",
     "fix:svg": "svgo -f ./src -r --enable=prefixIds --disable=removeViewBox",
-    "mock": "json-server --watch ./mock-api/db.json --routes ./mock-api/routes.json"
+    "mock": "json-server --watch ./mock-api/db.json --routes ./mock-api/routes.json -H 0.0.0.0 -p 3000"
   },
   "eslintConfig": {
     "extends": [
