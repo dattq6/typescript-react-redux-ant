@@ -1,8 +1,9 @@
 import Axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
 import { delay } from "../utils";
 
+const baseUrl = `${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}`;
 const axiosOptions = {
-  baseURL: "http://localhost:3000",
+  baseURL: baseUrl || "http://localhost:3000",
   withCredentials: true,
   headers: {
     accept: "application/json",

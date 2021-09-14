@@ -18,8 +18,13 @@ yarn start
 ```
 yarn build
 ```
-### 4. How to deploy
+### 4. How to deploy to development environment
 - Just push the `build` folder to your hosting
+1. Build
+```
+  yarn build:dev
+```
+2. Deploy
 Example when you using firebase hosting
 ```
 firebase deploy --project {your_project_id}
