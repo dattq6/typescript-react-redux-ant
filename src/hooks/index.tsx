@@ -29,7 +29,8 @@ export const useResetLoading = ({
       if (successActions) successActions();
       dispatch(resetLoading({ reducer, loadingKey: keyName }));
     } else if (key === "failed") {
-      if (useServerError?.data) notification.error({ message: useServerError.data });
+      console.log(useServerError);
+      if (useServerError) notification.error({ message: useServerError.statusText || useServerError.data });
       if (failedMessage) notification.error({ message: failedMessage });
       if (falledActions) falledActions();
       dispatch(resetLoading({ reducer, loadingKey: keyName }));

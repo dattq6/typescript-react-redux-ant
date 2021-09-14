@@ -4,7 +4,10 @@ import { Provider } from "react-redux";
 import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
+import { setupAxiosInterceptors } from "./services/http";
 import store from "./stores";
+
+setupAxiosInterceptors({});
 
 ReactDOM.render(
   <Provider store={store}>

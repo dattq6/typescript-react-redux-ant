@@ -17,7 +17,7 @@ const userSlice = createSlice({
     builder.addCase(getUserAccounts.fulfilled, (state, { payload }) => {
       state.getUserAccountsStatus = "success";
       state.accounts = {
-        data: payload,
+        data: payload.map((item: any) => item.attributes),
       };
     });
     builder.addCase(getUserAccounts.rejected, (state, { payload }) => {

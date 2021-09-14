@@ -1,9 +1,4 @@
-import {
-  Action,
-  configureStore,
-  createAction,
-  ThunkAction,
-} from "@reduxjs/toolkit";
+import { Action, configureStore, createAction, ThunkAction } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import appReducer from "./reducer";
 
@@ -23,6 +18,7 @@ const rootReducer = (state: any, action: any) => {
       [reducer]: {
         ...state[reducer],
         [loadingKey]: "idle",
+        error: null,
       },
     };
   }
@@ -37,19 +33,16 @@ export const resetLoading = createAction<ResetLoadingType>("RESET_LOADING");
 const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.REACT_APP_ENV === "development",
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 export type AppState = ReturnType<typeof appReducer>;
 export type AppDispatch = typeof store.dispatch;
 export const resetAppStore = createAction("RESET_APP");
 export const useAppDispatch = () => useDispatch<AppDispatch>();
-export const useAppSelector = <T extends (state: AppState) => any>(
-  selector: T
-): ReturnType<T> => useSelector(selector);
+export const useAppSelector = <T extends (state: AppState) => any>(selector: T): ReturnType<T> => useSelector(selector);
 export type StoreType = typeof store;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  AppState,
-  unknown,
-  Action<string>
->;
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppState, unknown, Action<string>>;
 export default store;

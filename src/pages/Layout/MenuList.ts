@@ -14,6 +14,13 @@ export const menus = [
     key: getRandomKey(),
     path: "/handle-exception",
   },
+  {
+    name: "Test Page Not Found",
+    label: "Page Not Found",
+    icon: "search",
+    key: getRandomKey(),
+    path: `/page-not-found`,
+  },
 ];
 
 export type MenuProps = typeof menus[number];

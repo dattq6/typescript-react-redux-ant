@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, notification, Row } from "antd";
+import { Button, Col, Form, Input, Row } from "antd";
 import React from "react";
 import { useNavigate } from "react-router";
 import { useResetLoading } from "../../hooks";
@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../stores";
 import { getUserAccounts } from "../../stores/user/user.action";
 const { Item } = Form;
 const UserPage = () => {
-  const { getUserAccountsStatus } = useAppSelector((state) => state.user);
+  const { getUserAccountsStatus, error } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -18,6 +18,7 @@ const UserPage = () => {
       navigate("accounts");
     },
     successMessage: "Get Account Successfully.",
+    useServerError: error,
   });
 
   const handleSubmit = (values: { userId: string }) => {

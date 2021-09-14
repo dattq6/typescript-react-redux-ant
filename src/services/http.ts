@@ -1,13 +1,12 @@
 import Axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
 import { delay } from "../utils";
 
-const baseUrl = `${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}`;
 const axiosOptions = {
-  baseURL: baseUrl || "http://localhost:3000",
-  withCredentials: true,
-  headers: {
-    accept: "application/json",
-  },
+  baseURL: process.env.REACT_APP_URL || "http://localhost:3000",
+  // withCredentials: true,
+  // headers: {
+  //   accept: "application/json",
+  // },
 };
 const axios = Axios.create(axiosOptions);
 const request = async (req: Partial<Request>, config: AxiosRequestConfig = {}) => {
@@ -59,29 +58,36 @@ export const del = async <T>(url: string, data?: T, axiosConfig: AxiosRequestCon
   return request({ url, method: "DELETE" }, config);
 };
 
-export const setupAxiosInterceptors = (
-  onUnauthenticated: (data: any) => void,
-  handleInternalServerError: (error: { status: number; message: string }) => void
-) => {
+type ResponseInterceptors = {
+  onUnauthenticated?: (data: any) => void;
+  onServerError?: (error: { status: number; message: string }) => void;
+};
+export const setupAxiosInterceptors = ({
+  onUnauthenticated = () => {},
+  onServerError = () => {},
+}: ResponseInterceptors) => {
   const onResponseSuccess = (response: any) => response;
   const onResponseFailure = (error: AxiosError) => {
     const status = error.response?.status;
     const data = error.response?.data;
-    const { meta } = error.config as any;
 
-    if (status === 401) {
-      if (meta.onUnAuthenticated) {
-        meta.onUnAuthenticated(data);
-      } else {
-        onUnauthenticated(data);
-      }
+    if (status && status === 401) {
+      onUnauthenticated(data);
+    }
+
+    if (status && status === 404) {
+      console.log(error);
     }
 
     // for 500 errors
     if (status && status <= 504 && status >= 500) {
-      handleInternalServerError({ status, message: data?.data });
+      onServerError({ status, message: data?.data });
     }
-    return Promise.reject(error);
+    return Promise.reject({
+      status,
+      data,
+      statusText: error.response?.statusText,
+    });
   };
 
   axios.interceptors.response.use(onResponseSuccess, onResponseFailure);
